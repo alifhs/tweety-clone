@@ -1,15 +1,22 @@
 <ul class="list-group">
 
-
-    @foreach (range(1, 8) as $index)
-
+    @auth
+        
+    
+    
+    @forelse (auth()->user()->follows as $user)
+        
 
         <li class="list-group-item   mb-3">
             <div>
                 <img src="https://i.pravatar.cc/48" class="rounded-circle" alt="">
-                John Doe
+                <a href="{{ route('profile', $user) }}">{{ $user->name }}</a>
             </div>
         </li>
 
-    @endforeach
+    @empty
+    <p>No Friends Yet</p>
+
+    @endforelse
+    @endauth
 </ul>

@@ -6,10 +6,12 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Followable;
+use App\Models\Like;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Followable;
 
     /**
      * The attributes that are mass assignable.
@@ -17,9 +19,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'username',
         'name',
         'email',
         'password',
+        'avatar'
     ];
 
     /**
@@ -40,4 +44,33 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function timeline()
+    {
+
+        $friends = $this->follows()->pluck('id');
+
+        return Tweet::whereIn('user_id', $friends)->orWhere('user_id', $this->id)  //returns relation object and on that we can apply withlikes custom query
+        ->withLikes()
+        ->latest()
+        ->paginate(50);
+    }
+   
+
+    public function tweets()
+    {
+        return $this->hasMany(Tweet::class);
+    }
+    public function getRouteKeyName()
+    {
+        return 'username';
+    }
+
+    public function likes(){
+       return $this->hasMany(Like::class);
+    }
 }
+
+// $user = new User();
+
+// echo $user;

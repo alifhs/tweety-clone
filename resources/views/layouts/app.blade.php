@@ -24,14 +24,43 @@
         <section class="px-5">
             <header>
                 <h1>
-                    <img style="width: 100px" src="images/bang.jpg" alt="ami ekta bang">
+                    <img style="width: 100px" src="/images/bang.jpg" alt="ami ekta bang">
                 </h1>
             </header>
         </section>
       
+
         <section class="px-5">
-            <main class="py-4">
-                @yield('content')
+            <main class="py-2">
+                <div class="container">
+                    <div class="row">
+                        
+                            
+                        <div class="col-lg-3">
+                            @auth
+                            @include('_sidebar-links')
+                            @endauth
+                        </div>
+                  
+                        <div class="col-lg-6">
+                          
+                            @yield('content')
+                           
+                        </div>
+                        
+                            
+                        
+                        <div class="col-lg-3">
+                            @auth
+                            <div>
+                            <h3>Following</h3>
+                            @include('_friends-list')
+                             </div>
+                            @endauth
+                        </div>
+                        
+                    </div>
+                </div>
             </main>
         </section>
         
